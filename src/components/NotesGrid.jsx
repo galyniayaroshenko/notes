@@ -10,15 +10,14 @@ class NotesGrid extends Component {
       <div className="notes-grid">
         {
           this.props.notes &&
-          this.props.notes.map(function(note, i){
+          this.props.notes.map((note, i) => {
             return (
               <Note
-                width='250px'
+                color={note.color}
                 key={note.id}
                 onDelete={onNoteDelete.bind(null, note)}
-                color={note.color}>
-                {note.text}
-              </Note>
+                width='250px'
+              >{note.text}</Note>
             );
           })
         }

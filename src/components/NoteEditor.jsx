@@ -6,10 +6,6 @@ class NoteEditor extends Component {
     color: 'yellow'
   };
 
-  handleTextChange = (event) => {
-    this.setState({ text: event.target.value });
-  };
-
   handleColorChange = (e) => {
     this.setState(Object.assign({}, this.state, { color: e.target.value }));
   };
@@ -25,26 +21,33 @@ class NoteEditor extends Component {
     this.setState({ text: '' });
   };
 
+  handleTextChange = (event) => {
+    this.setState({ text: event.target.value });
+  };
+
   render = () => {
     return (
         <div className="note-editor">
           <textarea
+            className="textarea"
+            onChange={this.handleTextChange}
+            onClick={this.props.onFocus}
             placeholder="Enter your note here..."
             rows={5}
-            className="textarea"
             value={this.state.text}
-            onChange={this.handleTextChange}
-            onClick={this.props.onFocusTextInput}
           />
           <div>
             <label>Сhoose color for note:
               <input
-                value={this.state.color}
-                type="color"
                 onChange={this.handleColorChange}
+                type="color"
+                value={this.state.color}
               />
             </label>
-            <button className="add-button" onClick={this.handleNoteAdd}>Add</button>
+            <button
+              className="add-button"
+              onClick={this.handleNoteAdd}
+            >Add</button>
           </div>
         </div>
     );

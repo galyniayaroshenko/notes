@@ -5,11 +5,11 @@ class Filter extends Component {
     return (
       <div className="note-editor">
         <input
-          value={this.props.valueFilter}
+          className="textarea"
+          onChange={this.props.onFilter}
           placeholder="Filter"
           type="text"
-          onChange={this.props.onFilter}
-          className="textarea"
+          value={this.props.filterValue}
         />
       </div>
     );
