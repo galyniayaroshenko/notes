@@ -34,6 +34,7 @@ class NoteEditor extends Component {
             className="textarea"
             value={this.state.text}
             onChange={this.handleTextChange}
+            onClick={this.props.onFocusTextInput}
           />
           <div>
             <label>Сhoose color for note:
