@@ -21,6 +21,12 @@ class App extends Component {
     }
   };
 
+  componentDidMount = () => {
+    const notes = JSON.stringify(this.state.notes);
+
+    localStorage.setItem('notes', notes);
+  };
+
   shouldComponentUpdate = (nextProps, nextState) => {
     if (!nextState.filter) {
       const notes = JSON.stringify(nextState.notes);
@@ -52,17 +58,17 @@ class App extends Component {
 
     if (newNote.text) {
       newNotes.unshift(newNote);
-      this.setState(Object.assign({}, this.state, { notes: newNotes }));
+      this.setState(Object.assign({}, this.state, { notes: newNotes, filter: false }));
     }
   };
 
   handleNoteDelete = (note) => {
     const noteId = note.id;
-    const newNotes = this.state.notes.filter((note) => {
+    const newNotes = JSON.parse(localStorage.getItem('notes')).filter((note) => {
       return note.id !== noteId;
     });
 
-    this.setState(Object.assign({}, this.state, { notes: newNotes }));
+    this.setState(Object.assign({}, this.state, { notes: newNotes, filter: false }));
   };
 
   render = () => {
