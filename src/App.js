@@ -3,13 +3,13 @@ import './App.css';
 
 import NoteEditor from './components/NoteEditor';
 import NotesGrid from './components/NotesGrid';
-import Filter from './components/Filter';
+import Search from './components/Search';
 
 class App extends Component {
   state = {
     notes: [],
-    filter: false,
-    filterValue: ''
+    search: false,
+    serachValue: ''
   };
 
   /* hooks */
@@ -28,7 +28,7 @@ class App extends Component {
   };
 
   shouldComponentUpdate = (nextProps, nextState) => {
-    if (!nextState.filter) {
+    if (!nextState.search) {
       const notes = JSON.stringify(nextState.notes);
 
       localStorage.setItem('notes', notes);
@@ -41,16 +41,16 @@ class App extends Component {
   focusNote = () => {
     const localNotes = JSON.parse(localStorage.getItem('notes'));
 
-    this.setState(Object.assign({}, this.state, { filterValue: '', notes: localNotes }));
+    this.setState(Object.assign({}, this.state, { serachValue: '', notes: localNotes }));
   };
 
-  handelFilter = (e) => {
+  handelSearch = (e) => {
     const value = e.target.value.toLowerCase();
     const result = JSON.parse(localStorage.getItem('notes')).filter(item => {
       return item.text.toLowerCase().indexOf(value) !== -1;
     });
 
-    this.setState(Object.assign({}, this.state, { notes: result, filter: true, filterValue: e.target.value }));
+    this.setState(Object.assign({}, this.state, { notes: result, search: true, serachValue: e.target.value }));
   };
 
   handleNoteAdd = (newNote) => {
@@ -58,7 +58,7 @@ class App extends Component {
 
     if (newNote.text) {
       newNotes.unshift(newNote);
-      this.setState(Object.assign({}, this.state, { notes: newNotes, filter: false }));
+      this.setState(Object.assign({}, this.state, { notes: newNotes, search: false }));
     }
   };
 
@@ -68,14 +68,14 @@ class App extends Component {
       return note.id !== noteId;
     });
 
-    this.setState(Object.assign({}, this.state, { notes: newNotes, filter: false }));
+    this.setState(Object.assign({}, this.state, { notes: newNotes, search: false, serachValue: '' }));
   };
 
   render = () => {
     return (
       <div className="notes-app">
         <h2 className="app-header">NotesApp</h2>
-        <Filter onFilter={this.handelFilter} filterValue={this.state.filterValue} />
+        <Search onSearch={this.handelSearch} searchValue={this.state.serachValue} />
         <NoteEditor onNoteAdd={this.handleNoteAdd} onFocus={this.focusNote} />
         <NotesGrid notes={this.state.notes} onNoteDelete={this.handleNoteDelete} />
       </div>
