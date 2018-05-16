@@ -13,7 +13,7 @@ class App extends Component {
   };
 
   /* hooks */
-  componentWillMount = () => {
+  componentWillMount() {
     const localNotes = JSON.parse(localStorage.getItem('notes'));
 
     if (localNotes) {
@@ -21,13 +21,13 @@ class App extends Component {
     }
   };
 
-  componentDidMount = () => {
+  componentDidMount() {
     const notes = JSON.stringify(this.state.notes);
 
     localStorage.setItem('notes', notes);
   };
 
-  shouldComponentUpdate = (nextProps, nextState) => {
+  shouldComponentUpdate(nextProps, nextState) {
     if (!nextState.search) {
       const notes = JSON.stringify(nextState.notes);
 
@@ -71,7 +71,7 @@ class App extends Component {
     this.setState(Object.assign({}, this.state, { notes: newNotes, search: false, serachValue: '' }));
   };
 
-  render = () => {
+  render() {
     return (
       <div className="notes-app">
         <h2 className="app-header">NotesApp</h2>

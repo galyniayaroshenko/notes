@@ -25,7 +25,7 @@ class NoteEditor extends Component {
     this.setState({ text: event.target.value });
   };
 
-  render = () => {
+  render() {
     return (
         <div className="note-editor">
           <textarea
