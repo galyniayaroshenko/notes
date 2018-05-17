@@ -4,13 +4,16 @@ import './App.css';
 import NoteEditor from './components/NoteEditor';
 import NotesGrid from './components/NotesGrid';
 import Search from './components/Search';
+import Filter from './components/Filter';
 
 class App extends Component {
   state = {
     notes: [],
     search: false,
     serachValue: '',
-    noteEdit: {}
+    noteEdit: {},
+    filter: false,
+    isAdd: false
   };
 
   /* hooks */
@@ -29,7 +32,7 @@ class App extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (!nextState.search) {
+    if ((!nextState.search && !nextState.filter) || nextState.isAdd) {
       const notes = JSON.stringify(nextState.notes);
 
       localStorage.setItem('notes', notes);
@@ -42,7 +45,53 @@ class App extends Component {
   focusNote = () => {
     const localNotes = JSON.parse(localStorage.getItem('notes'));
 
-    this.setState(Object.assign({}, this.state, { serachValue: '', notes: localNotes }));
+    this.setState(Object.assign({}, this.state, { serachValue: '', notes: localNotes, isAdd: true }));
+  };
+
+  handleFilter = (id) => {
+    const localNotes = JSON.parse(localStorage.getItem('notes'));
+
+    switch(id) {
+      case 'all': {
+        this.setState(Object.assign(
+          {},
+          this.state,
+          { notes: localNotes, filter: true, isAdd: false }
+        ));
+
+        break;
+      }
+      case 'completed': {
+        const newNotes = localNotes.filter(item => {
+          return item.completed;
+        });
+
+        this.setState(Object.assign(
+          {},
+          this.state,
+          { notes: newNotes, filter: true, isAdd: false }
+        ));
+
+        break;
+      }
+      case 'active': {
+        const newNotes = localNotes.filter(item => {
+          return !item.completed;
+        });
+
+        this.setState(Object.assign(
+          {},
+          this.state,
+          { notes: newNotes, filter: true, isAdd: false }
+        ));
+
+        break;
+      }
+
+      default: {
+        console.log('I do not know this id');
+      }
+    }
   };
 
   handelSearch = (e) => {
@@ -110,6 +159,11 @@ class App extends Component {
           notes={this.state.notes}
           onNoteDelete={this.handleNoteDelete}
           onNoteEdit={this.handleNoteEdit}
+        />
+        <hr className="clear"/>
+        <Filter
+          onHandleFilter={this.handleFilter}
+          isAdd={this.state.isAdd}
         />
       </div>
     );

@@ -4,16 +4,25 @@ class NoteEditor extends Component {
   state = {
     text: '',
     color: '#00ff40',
-    editId: null
+    editId: null,
+    completed: false
   };
 
   /* hooks */
   componentWillReceiveProps(nextProps) {
     if (nextProps.noteEdit.id) {
-      this.setState(Object.assign({}, this.state, { text: nextProps.noteEdit.text, editId: nextProps.noteEdit.id, color: nextProps.noteEdit.color }));
+      this.setState(Object.assign({}, this.state, {
+        text: nextProps.noteEdit.text,
+        editId: nextProps.noteEdit.id,
+        color: nextProps.noteEdit.color,
+        completed: nextProps.noteEdit.completed
+      }));
     }
   };
   /* hooks */
+  handleCheckboxChange = (e) => {
+    this.setState(Object.assign({}, this.state, { completed: !this.state.completed }));
+  };
 
   handleColorChange = (e) => {
     this.setState(Object.assign({}, this.state, { color: e.target.value }));
@@ -23,22 +32,24 @@ class NoteEditor extends Component {
     const newNote = {
       color: this.state.color,
       id: Date.now(),
-      text: this.state.text
+      text: this.state.text,
+      completed: this.state.completed
     };
 
     this.props.onNoteAdd(newNote);
-    this.setState(Object.assign({}, this.state, { text: '' }));
+    this.setState(Object.assign({}, this.state, { text: '', completed: false }));
   };
 
   handleNoteEdit = () => {
     const newNote = {
       color: this.state.color,
       id: this.state.editId,
-      text: this.state.text
+      text: this.state.text,
+      completed: this.state.completed
     };
 
     this.props.onNoteEdit(newNote);
-    this.setState(Object.assign({}, this.state, { text: '', editId: null }));
+    this.setState(Object.assign({}, this.state, { text: '', editId: null, completed: false }));
   };
 
   handleTextChange = (event) => {
@@ -62,6 +73,13 @@ class NoteEditor extends Component {
               onChange={this.handleColorChange}
               type="color"
               value={this.state.color}
+            />
+          </label>
+          <label>Complited:
+            <input
+              type="checkbox"
+              checked={this.state.completed}
+              onChange={this.handleCheckboxChange}
             />
           </label>
           {

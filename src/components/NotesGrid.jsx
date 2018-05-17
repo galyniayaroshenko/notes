@@ -7,7 +7,6 @@ class NotesGrid extends Component {
     const onNoteDelete = this.props.onNoteDelete;
     const onNoteEdit = this.props.onNoteEdit;
 
-
     return (
       <div className="notes-grid">
         {
@@ -20,7 +19,10 @@ class NotesGrid extends Component {
                 onDelete={onNoteDelete.bind(null, note)}
                 onEdit={onNoteEdit.bind(null, note)}
                 width='250px'
-              >{note.text}</Note>
+              >
+                <h4>{note.completed ? 'Completed' : 'Active'}</h4>
+                <p>{note.text}</p>
+              </Note>
             );
           })
         }
