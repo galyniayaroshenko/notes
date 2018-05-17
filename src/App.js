@@ -9,7 +9,8 @@ class App extends Component {
   state = {
     notes: [],
     search: false,
-    serachValue: ''
+    serachValue: '',
+    noteEdit: {}
   };
 
   /* hooks */
@@ -54,7 +55,8 @@ class App extends Component {
   };
 
   handleNoteAdd = (newNote) => {
-    let newNotes = this.state.notes.slice();
+    const localNotes = JSON.parse(localStorage.getItem('notes'));
+    let newNotes = localNotes.slice();
 
     if (newNote.text) {
       newNotes.unshift(newNote);
@@ -71,13 +73,44 @@ class App extends Component {
     this.setState(Object.assign({}, this.state, { notes: newNotes, search: false, serachValue: '' }));
   };
 
+  handleNoteEdit = (note) => {
+    this.setState(Object.assign({}, this.state, { noteEdit: note }));
+  };
+
+  noteEdit = (note) => {
+    const localNotes = JSON.parse(localStorage.getItem('notes'));
+    const newNotes = [];
+
+    localNotes.forEach(item => {
+      if (item.id === note.id) {
+        newNotes.push(note);
+      } else {
+        newNotes.push(item);
+      }
+    });
+
+    this.setState(Object.assign({}, this.state, { notes: newNotes, noteEdit: {} }));
+  };
+
   render() {
     return (
       <div className="notes-app">
         <h2 className="app-header">NotesApp</h2>
-        <Search onSearch={this.handelSearch} searchValue={this.state.serachValue} />
-        <NoteEditor onNoteAdd={this.handleNoteAdd} onFocus={this.focusNote} />
-        <NotesGrid notes={this.state.notes} onNoteDelete={this.handleNoteDelete} />
+        <Search
+          onSearch={this.handelSearch}
+          searchValue={this.state.serachValue}
+        />
+        <NoteEditor
+          noteEdit={this.state.noteEdit}
+          onFocus={this.focusNote}
+          onNoteAdd={this.handleNoteAdd}
+          onNoteEdit={this.noteEdit}
+        />
+        <NotesGrid
+          notes={this.state.notes}
+          onNoteDelete={this.handleNoteDelete}
+          onNoteEdit={this.handleNoteEdit}
+        />
       </div>
     );
   }
