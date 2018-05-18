@@ -50,11 +50,20 @@ class App extends Component {
   focusNote = () => {
     const localNotes = JSON.parse(localStorage.getItem('notes'));
 
-    this.setState(Object.assign(
-      {},
-      this.state,
-      { serachValue: '', notes: localNotes, isAdd: true }
-    ));
+    if (!this.state.noteEdit.id) {
+      this.setState(Object.assign(
+        {},
+        this.state,
+        { serachValue: '', notes: localNotes, isAdd: true, filterValue: localNotes }
+      ));
+    } else
+    if (this.state.serachValue) {
+      this.setState(Object.assign(
+        {},
+        this.state,
+        { serachValue: '', isAdd: true, notes: localNotes, filterValue: localNotes }
+      ));
+    }
   };
 
   handleFilter = (id) => {
@@ -65,7 +74,7 @@ class App extends Component {
         this.setState(Object.assign(
           {},
           this.state,
-          { notes: localNotes, filter: true, isAdd: false, filterValue: localNotes }
+          { notes: localNotes, filter: true, isAdd: false, filterValue: localNotes, serachValue: '' }
         ));
 
         break;
@@ -78,7 +87,7 @@ class App extends Component {
         this.setState(Object.assign(
           {},
           this.state,
-          { notes: newNotes, filter: true, isAdd: false, filterValue: newNotes }
+          { notes: newNotes, filter: true, isAdd: false, filterValue: newNotes, serachValue: '' }
         ));
 
         break;
@@ -91,7 +100,7 @@ class App extends Component {
         this.setState(Object.assign(
           {},
           this.state,
-          { notes: newNotes, filter: true, isAdd: false, filterValue: newNotes }
+          { notes: newNotes, filter: true, isAdd: false, filterValue: newNotes, serachValue: '' }
         ));
 
         break;
@@ -162,7 +171,7 @@ class App extends Component {
     this.setState(Object.assign(
       {},
       this.state,
-      { notes: newNotes, noteEdit: {}, filterValue: newNotes }
+      { notes: newNotes, noteEdit: {}, isAdd: true, filterValue: newNotes }
     ));
   };
 
