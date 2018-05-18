@@ -8,12 +8,13 @@ import Filter from './components/Filter';
 
 class App extends Component {
   state = {
+    filter: false,
+    filterValue: [],
+    isAdd: false,
+    noteEdit: {},
     notes: [],
     search: false,
-    serachValue: '',
-    noteEdit: {},
-    filter: false,
-    isAdd: false
+    serachValue: ''
   };
 
   /* hooks */
@@ -21,7 +22,11 @@ class App extends Component {
     const localNotes = JSON.parse(localStorage.getItem('notes'));
 
     if (localNotes) {
-      this.setState(Object.assign({}, this.state, { notes: localNotes }));
+      this.setState(Object.assign(
+        {},
+        this.state,
+        { notes: localNotes, filterValue: localNotes }
+      ));
     }
   };
 
@@ -45,7 +50,11 @@ class App extends Component {
   focusNote = () => {
     const localNotes = JSON.parse(localStorage.getItem('notes'));
 
-    this.setState(Object.assign({}, this.state, { serachValue: '', notes: localNotes, isAdd: true }));
+    this.setState(Object.assign(
+      {},
+      this.state,
+      { serachValue: '', notes: localNotes, isAdd: true }
+    ));
   };
 
   handleFilter = (id) => {
@@ -56,7 +65,7 @@ class App extends Component {
         this.setState(Object.assign(
           {},
           this.state,
-          { notes: localNotes, filter: true, isAdd: false }
+          { notes: localNotes, filter: true, isAdd: false, filterValue: localNotes }
         ));
 
         break;
@@ -69,7 +78,7 @@ class App extends Component {
         this.setState(Object.assign(
           {},
           this.state,
-          { notes: newNotes, filter: true, isAdd: false }
+          { notes: newNotes, filter: true, isAdd: false, filterValue: newNotes }
         ));
 
         break;
@@ -82,7 +91,7 @@ class App extends Component {
         this.setState(Object.assign(
           {},
           this.state,
-          { notes: newNotes, filter: true, isAdd: false }
+          { notes: newNotes, filter: true, isAdd: false, filterValue: newNotes }
         ));
 
         break;
@@ -96,11 +105,15 @@ class App extends Component {
 
   handelSearch = (e) => {
     const value = e.target.value.toLowerCase();
-    const result = JSON.parse(localStorage.getItem('notes')).filter(item => {
+    const result = this.state.filterValue.filter(item => {
       return item.text.toLowerCase().indexOf(value) !== -1;
     });
 
-    this.setState(Object.assign({}, this.state, { notes: result, search: true, serachValue: e.target.value }));
+    this.setState(Object.assign(
+      {},
+      this.state,
+      { notes: result, search: true, serachValue: e.target.value, isAdd: false }
+    ));
   };
 
   handleNoteAdd = (newNote) => {
@@ -109,7 +122,11 @@ class App extends Component {
 
     if (newNote.text) {
       newNotes.unshift(newNote);
-      this.setState(Object.assign({}, this.state, { notes: newNotes, search: false }));
+      this.setState(Object.assign(
+        {},
+        this.state,
+        { notes: newNotes, search: false, isAdd: true, serachValue: '', filterValue: newNotes }
+      ));
     }
   };
 
@@ -119,7 +136,11 @@ class App extends Component {
       return note.id !== noteId;
     });
 
-    this.setState(Object.assign({}, this.state, { notes: newNotes, search: false, serachValue: '' }));
+    this.setState(Object.assign(
+      {},
+      this.state,
+      { notes: newNotes, search: false, serachValue: '', filterValue: newNotes }
+    ));
   };
 
   handleNoteEdit = (note) => {
@@ -138,7 +159,11 @@ class App extends Component {
       }
     });
 
-    this.setState(Object.assign({}, this.state, { notes: newNotes, noteEdit: {} }));
+    this.setState(Object.assign(
+      {},
+      this.state,
+      { notes: newNotes, noteEdit: {}, filterValue: newNotes }
+    ));
   };
 
   render() {
